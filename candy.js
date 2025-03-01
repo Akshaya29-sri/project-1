@@ -20,12 +20,12 @@ function startGame(){
           tile.id=r.toString() + "-" + c.toString();
           tile.src="images/" + randomCandy() + ".png";
 
-          tile.addEventListener("dragStart",dragStart);
+          /*tile.addEventListener("dragStart",dragStart);
           tile.addEventListener("dragOver",dragOver);
           tile.addEventListener("dragEnter",dragEntert);
           tile.addEventListener("dragLeave",dragLeave);
           tile.addEventListener("drop",drop);
-          tile.addEventListener("dragEnd",dragEnd);
+          tile.addEventListener("dragEnd",dragEnd);*/
 
 
           document.getElementById("board").append(tile);
@@ -36,7 +36,7 @@ function startGame(){
     }
     console.log(board);
 }
-fucntion dragStart(){
+function dragStart(){
     currTile=this;
 }
 function dragOver(e){
