@@ -1,4 +1,27 @@
+/*let candies = ["Blue", "Orange", "Green", "Yellow", "Red", "Purple"];
+let board = [];
+let rows = 9;
+let columns = 9;
+let score = 0;
 
+let currTile;
+let otherTile;*/
+
+
+window.onload = function() {
+    startGame();
+document.getElementById("playButton").addEventListener("click",function(){
+    document.getElementById("start-screen").style.display="none";
+    document.getElementById("gameScreen").style.display="block";
+    document.getElementById("board").style.display="block";
+})
+    //1/10th of a second
+    window.setInterval(function(){
+        crushCandy();
+        slideCandy();
+        generateCandy();
+    }, 100);
+}
 let candies = ["Blue", "Orange", "Green", "Yellow", "Red", "Purple"];
 let board = [];
 let rows = 9;
@@ -7,18 +30,6 @@ let score = 0;
 
 let currTile;
 let otherTile;
-
-
-window.onload = function() {
-    startGame();
-
-    //1/10th of a second
-    window.setInterval(function(){
-        crushCandy();
-        slideCandy();
-        generateCandy();
-    }, 100);
-}
 
 function randomCandy() {
     return candies[Math.floor(Math.random() * candies.length)]; //0 - 5.99

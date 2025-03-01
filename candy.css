@@ -7,7 +7,7 @@
 display:none;
 }
 #start-screen{
-    background-image: url("./start\ screen.jpg") no-repeat center center fixed;
+    background: url("./start\ screen.jpg") no-repeat center center fixed;
     background-size: cover;
 
     width:100vw;
@@ -22,7 +22,7 @@ display:none;
     padding:15px 30px;
     font-size: 18px;
     font-weight: bold;
-    background-color: pink;
+    background-color: darkviolet;
     color:black;
     border:none;
     border-radius: 10px;
