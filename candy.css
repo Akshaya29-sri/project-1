@@ -1,4 +1,4 @@
-body {
+#gameScreen {
     background: url("./background.jpg") no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, Helvetica, sans-serif;
@@ -7,10 +7,9 @@ body {
 display:none;
 }
 #start-screen{
-    background-image: url("./startscreen.jpg");
+    background-image: url("./start\ screen.jpg") no-repeat center center fixed;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+
     width:100vw;
     height:100vh;
     display:flex;
@@ -39,6 +38,7 @@ display:none;
     display: flex;
     flex-wrap: wrap;
     overflow:hidden;
+    display:none;
 }
 
 #board img {
