@@ -4,8 +4,31 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     color: white;
     text-align: center;
+display:none;
 }
-
+#start-screen{
+    background-image: url("./startscreen.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width:100vw;
+    height:100vh;
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    
+}
+#playButton{
+    padding:15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: pink;
+    color:black;
+    border:none;
+    border-radius: 10px;
+    cursor: pointer;
+}
 #board {
     width: 450px;
     height: 450px;
