@@ -28,6 +28,10 @@ let rows = 9;
 let columns = 9;
 let score = 0;
 
+let timerLeft=60;
+let timerDisplay=document.getElementById("timer");
+let timerInterval;
+
 let currTile;
 let otherTile;
 
@@ -213,3 +217,19 @@ function generateCandy() {
         }
     }
 }
+
+function startTimer(){
+    timerInterval=setInterval(()=>{
+        if(timerLeft>0){
+            timerLeft--;
+            timerDisplay.innerText=`Time:${timerLeft}s`;
+        }else{
+            clearInterval(timerInterval);
+            endGame();
+        }
+    },1000);
+}
+function endGame(){
+    alert("time is up! Game over! ")
+}
+document.getElementById("playButton").addEventListener("click",startTimer);
