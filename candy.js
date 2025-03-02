@@ -222,7 +222,7 @@ function startTimer(){
     timerInterval=setInterval(()=>{
         if(timerLeft>0){
             timerLeft--;
-            timerDisplay.innerText=`Time:${timerLeft}s`;
+            timerDisplay.innerText=`Timer:${timerLeft}s`;
         }else{
             clearInterval(timerInterval);
             endGame();
