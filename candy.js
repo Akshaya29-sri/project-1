@@ -14,6 +14,7 @@ document.getElementById("playButton").addEventListener("click",function(){
     document.getElementById("start-screen").style.display="none";
     document.getElementById("gameScreen").style.display="block";
     document.getElementById("board").style.display="block";
+   
 })
     //1/10th of a second
     window.setInterval(function(){
@@ -40,6 +41,7 @@ function randomCandy() {
 }
 
 function startGame() {
+    //const dragHandler=new DragDropHandler();
     for (let r = 0; r < rows; r++) {
         let row = [];
         for (let c = 0; c < columns; c++) {
@@ -49,12 +51,13 @@ function startGame() {
             tile.src = "./images/" + randomCandy() + ".png";
 
             //DRAG FUNCTIONALITY
+            //const dragHandler=new DragDropHandler();
             tile.addEventListener("dragstart", dragStart); //click on a candy, initialize drag process
             tile.addEventListener("dragover", dragOver);  //clicking on candy, moving mouse to drag the candy
             tile.addEventListener("dragenter", dragEnter); //dragging candy onto another candy
             tile.addEventListener("dragleave", dragLeave); //leave candy over another candy
-            tile.addEventListener("drop", dragDrop); //dropping a candy over another candy
-            tile.addEventListener("dragend", dragEnd); //after drag process completed, we swap candies
+            tile.addEventListener("drop",dragDrop); //dropping a candy over another candy
+            tile.addEventListener("dragend",dragEnd); //after drag process completed, we swap candies
 
             document.getElementById("board").append(tile);
             row.push(tile);
@@ -125,7 +128,68 @@ function dragEnd() {
     }
 }
 
-function crushCandy() {
+/*class DragDropHandler{
+    constructor(){
+        this.currTile=null;
+        this.otherTile=null;
+    }
+    dragStart(event){
+        this.currTile=event.target;
+    }
+    dragOver(event){
+        event.preventDefault();
+    }
+    dragEnter(event){
+        event.preventDefault();
+    }
+    dragLeave(){
+
+    }
+    dragDrop(event){
+        this.otherTile=event.target;
+    }
+    dragEnd() {
+
+        if (currTile.src.includes("blank") || otherTile.src.includes("blank")) {
+            return;
+        }
+    
+        let currCoords = currTile.id.split("-"); // id="0-0" -> ["0", "0"]
+        let r = parseInt(currCoords[0]);
+        let c = parseInt(currCoords[1]);
+    
+        let otherCoords = otherTile.id.split("-");
+        let r2 = parseInt(otherCoords[0]);
+        let c2 = parseInt(otherCoords[1]);
+    
+        let moveLeft = c2 == c-1 && r == r2;
+        let moveRight = c2 == c+1 && r == r2;
+    
+        let moveUp = r2 == r-1 && c == c2;
+        let moveDown = r2 == r+1 && c == c2;
+    
+        let isAdjacent = moveLeft || moveRight || moveUp || moveDown;
+    
+        if (isAdjacent) {
+            let currImg = currTile.src;
+            let otherImg = otherTile.src;
+            currTile.src = otherImg;
+            otherTile.src = currImg;
+    
+            let validMove = checkValid();
+            if (!validMove) {
+                let currImg = currTile.src;
+                let otherImg = otherTile.src;
+                currTile.src = otherImg;
+                otherTile.src = currImg;    
+            }
+        }
+        this.currTile=null;
+        this.otherTile=null;
+}
+}*/
+
+ function crushCandy() {
     //crushFive();
     //crushFour();
     crushThree();
