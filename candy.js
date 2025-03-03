@@ -326,9 +326,11 @@ class Game {
         this.rows = 9;
         this.columns = 9;
         this.score = 0;
+
         this.timerLeft = 60;
         this.timerDisplay = document.getElementById("timer");
-        this.timerInterval = null;
+        this.timerInterval;
+
         this.currTile = null;
         this.otherTile = null;
     }
@@ -345,8 +347,8 @@ class Game {
                 tile.id = r.toString() + "-" + c.toString();
                 tile.src = "./images/" + this.randomCandy() + ".png";
 
-                // Add event listeners for drag functionality
-                tile.addEventListener("dragstart", this.dragStart.bind(this));
+                // DRAG FUNCTIONALITY
+                tile.addEventListener("dragstart", this.dragStart.bind(this)); 
                 tile.addEventListener("dragover", this.dragOver);
                 tile.addEventListener("dragenter", this.dragEnter);
                 tile.addEventListener("dragleave", this.dragLeave);
@@ -358,12 +360,11 @@ class Game {
             }
             this.board.push(row);
         }
-
         console.log(this.board);
     }
 
-    dragStart(event) {
-        this.currTile = event.target;
+    dragStart() {
+        this.currTile = this;
     }
 
     dragOver(e) {
@@ -376,8 +377,8 @@ class Game {
 
     dragLeave() {}
 
-    dragDrop(event) {
-        this.otherTile = event.target;
+    dragDrop() {
+        this.otherTile = this;
     }
 
     dragEnd() {
@@ -395,6 +396,7 @@ class Game {
 
         let moveLeft = c2 == c - 1 && r == r2;
         let moveRight = c2 == c + 1 && r == r2;
+
         let moveUp = r2 == r - 1 && c == c2;
         let moveDown = r2 == r + 1 && c == c2;
 
@@ -408,6 +410,8 @@ class Game {
 
             let validMove = this.checkValid();
             if (!validMove) {
+                let currImg = this.currTile.src;
+                let otherImg = this.otherTile.src;
                 this.currTile.src = otherImg;
                 this.otherTile.src = currImg;
             }
@@ -482,7 +486,7 @@ class Game {
     slideCandy() {
         for (let c = 0; c < this.columns; c++) {
             let ind = this.rows - 1;
-            for (let r = this.rows - 1; r >= 0; r--) {
+            for (let r = this.columns - 1; r >= 0; r--) {
                 if (!this.board[r][c].src.includes("blank")) {
                     this.board[ind][c].src = this.board[r][c].src;
                     ind -= 1;
@@ -502,41 +506,82 @@ class Game {
             }
         }
     }
+}
 
-    startTimer() {
+class Timer {
+    constructor(duration, displayElementId, onEndCallBack) {
+        this.duration = duration;
+        this.timerLeft = duration;
+        this.displayElement = document.getElementById(displayElementId);
+        this.onEndCallBack = onEndCallBack;
+        this.timerInterval = null;
+    }
+
+    start() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+        }
+        this.timerLeft = this.duration;
+        this.updateDisplay();
         this.timerInterval = setInterval(() => {
             if (this.timerLeft > 0) {
                 this.timerLeft--;
-                this.timerDisplay.innerText = `Timer: ${this.timerLeft}s`;
+                this.updateDisplay();
             } else {
-                clearInterval(this.timerInterval);
-                this.endGame();
+                this.stop();
+                if (this.onEndCallBack) {
+                    this.onEndCallBack();
+                }
             }
         }, 1000);
     }
 
-    endGame() {
-        alert("Time is up!");
-        document.getElementById("gameScreen").style.display = "none";
-        document.getElementById("start-screen").style.display = "block";
+    stop() {
+        clearInterval(this.timerInterval);
+        this.timerInterval = null;
+    }
+
+    reset() {
+        this.stop();
+        this.timerLeft = this.duration;
+        this.updateDisplay();
+    }
+
+    updateDisplay() {
+        if (this.displayElement) {
+            this.displayElement.innerText = `Timer:${this.timerLeft}s`;
+        } else {
+            console.error("Timer display element not found");
+        }
     }
 }
 
-// Initialize the game when the window loads
-window.onload = function () {
-    let game = new Game();
-    document.getElementById("playButton").addEventListener("click", function () {
+window.onload = function() {
+    const game = new Game();
+
+    document.getElementById("playButton").addEventListener("click", function() {
         document.getElementById("start-screen").style.display = "none";
         document.getElementById("gameScreen").style.display = "block";
         document.getElementById("board").style.display = "block";
+
         game.startGame();
-        game.startTimer();
     });
 
-    // Game loop to update game state
-    setInterval(function () {
+    window.setInterval(function() {
         game.crushCandy();
         game.slideCandy();
         game.generateCandy();
     }, 100);
+
+    const gameTimer = new Timer(60, "timer", function() {
+        alert("Time is up! Game over!");
+        document.getElementById("gameScreen").style.display = "none";
+        document.getElementById("start-screen").style.display = "block";
+    });
+
+    document.getElementById("playButton").addEventListener("click", function() {
+        gameTimer.start();
+    });
 };
+
+
