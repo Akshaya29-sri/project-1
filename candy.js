@@ -430,6 +430,8 @@ class Game {
                 let candy1 = this.board[r][c];
                 let candy2 = this.board[r][c + 1];
                 let candy3 = this.board[r][c + 2];
+
+                //if (!candy1 || !candy2 || !candy3)continue;
                 if (candy1.src == candy2.src && candy2.src == candy3.src && !candy1.src.includes("blank")) {
                     candy1.src = "./images/blank.png";
                     candy2.src = "./images/blank.png";
@@ -445,6 +447,7 @@ class Game {
                 let candy1 = this.board[r][c];
                 let candy2 = this.board[r + 1][c];
                 let candy3 = this.board[r + 2][c];
+               // if (!candy1 || !candy2 || !candy3)continue;
                 if (candy1.src == candy2.src && candy2.src == candy3.src && !candy1.src.includes("blank")) {
                     candy1.src = "./images/blank.png";
                     candy2.src = "./images/blank.png";
