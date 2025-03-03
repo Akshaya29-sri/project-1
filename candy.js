@@ -8,7 +8,7 @@ let currTile;
 let otherTile;*/
 
 
-window.onload = function() {
+/*window.onload = function() {
     startGame();
 document.getElementById("playButton").addEventListener("click",function(){
     document.getElementById("start-screen").style.display="none";
@@ -130,67 +130,6 @@ function dragEnd() {
     }
 }
 
-/*class DragDropHandler{
-    constructor(){
-        this.currTile=null;
-        this.otherTile=null;
-    }
-    dragStart(event){
-        this.currTile=event.target;
-    }
-    dragOver(event){
-        event.preventDefault();
-    }
-    dragEnter(event){
-        event.preventDefault();
-    }
-    dragLeave(){
-
-    }
-    dragDrop(event){
-        this.otherTile=event.target;
-    }
-    dragEnd() {
-
-        if (currTile.src.includes("blank") || otherTile.src.includes("blank")) {
-            return;
-        }
-    
-        let currCoords = currTile.id.split("-"); // id="0-0" -> ["0", "0"]
-        let r = parseInt(currCoords[0]);
-        let c = parseInt(currCoords[1]);
-    
-        let otherCoords = otherTile.id.split("-");
-        let r2 = parseInt(otherCoords[0]);
-        let c2 = parseInt(otherCoords[1]);
-    
-        let moveLeft = c2 == c-1 && r == r2;
-        let moveRight = c2 == c+1 && r == r2;
-    
-        let moveUp = r2 == r-1 && c == c2;
-        let moveDown = r2 == r+1 && c == c2;
-    
-        let isAdjacent = moveLeft || moveRight || moveUp || moveDown;
-    
-        if (isAdjacent) {
-            let currImg = currTile.src;
-            let otherImg = otherTile.src;
-            currTile.src = otherImg;
-            otherTile.src = currImg;
-    
-            let validMove = checkValid();
-            if (!validMove) {
-                let currImg = currTile.src;
-                let otherImg = otherTile.src;
-                currTile.src = otherImg;
-                otherTile.src = currImg;    
-            }
-        }
-        this.currTile=null;
-        this.otherTile=null;
-}
-}*/
-//const scoreManager=new scoreManager();
  function crushCandy() {
     
     crushThree();
@@ -301,7 +240,7 @@ function generateCandy() {
 function endGame(){
     alert("time is up! Game over! ")
 }
-document.getElementById("playButton").addEventListener("click",startTimer);*/
+document.getElementById("playButton").addEventListener("click",startTimer);
 
 
 class Timer{
@@ -356,4 +295,248 @@ const gameTimer=new Timer(60,"timerDisplay",endGame);
 document.getElementById("playButton").addEventListener("click",function(){
     //gameTimer.reset();
     gameTimer.start();
-});
+});*/
+
+
+
+
+/*window.onload = function () {
+    let game = new Game();
+    document.getElementById("playButton").addEventListener("click", function () {
+        document.getElementById("start-screen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
+        document.getElementById("board").style.display = "block";
+        game.startGame();
+        game.startTimer();
+    });
+
+    // Game loop to update game state
+    setInterval(function () {
+        game.crushCandy();
+        game.slideCandy();
+        game.generateCandy();
+    }, 100);
+};*/
+
+
+class Game {
+    constructor() {
+        this.candies = ["Blue", "Orange", "Green", "Yellow", "Red", "Purple"];
+        this.board = [];
+        this.rows = 9;
+        this.columns = 9;
+        this.score = 0;
+        this.timerLeft = 60;
+        this.timerDisplay = document.getElementById("timer");
+        this.timerInterval = null;
+        this.currTile = null;
+        this.otherTile = null;
+    }
+
+    randomCandy() {
+        return this.candies[Math.floor(Math.random() * this.candies.length)];
+    }
+
+    startGame() {
+        for (let r = 0; r < this.rows; r++) {
+            let row = [];
+            for (let c = 0; c < this.columns; c++) {
+                let tile = document.createElement("img");
+                tile.id = r.toString() + "-" + c.toString();
+                tile.src = "./images/" + this.randomCandy() + ".png";
+
+                // Add event listeners for drag functionality
+                tile.addEventListener("dragstart", this.dragStart.bind(this));
+                tile.addEventListener("dragover", this.dragOver);
+                tile.addEventListener("dragenter", this.dragEnter);
+                tile.addEventListener("dragleave", this.dragLeave);
+                tile.addEventListener("drop", this.dragDrop.bind(this));
+                tile.addEventListener("dragend", this.dragEnd.bind(this));
+
+                document.getElementById("board").append(tile);
+                row.push(tile);
+            }
+            this.board.push(row);
+        }
+
+        console.log(this.board);
+    }
+
+    dragStart(event) {
+        this.currTile = event.target;
+    }
+
+    dragOver(e) {
+        e.preventDefault();
+    }
+
+    dragEnter(e) {
+        e.preventDefault();
+    }
+
+    dragLeave() {}
+
+    dragDrop(event) {
+        this.otherTile = event.target;
+    }
+
+    dragEnd() {
+        if (this.currTile.src.includes("blank") || this.otherTile.src.includes("blank")) {
+            return;
+        }
+
+        let currCoords = this.currTile.id.split("-");
+        let r = parseInt(currCoords[0]);
+        let c = parseInt(currCoords[1]);
+
+        let otherCoords = this.otherTile.id.split("-");
+        let r2 = parseInt(otherCoords[0]);
+        let c2 = parseInt(otherCoords[1]);
+
+        let moveLeft = c2 == c - 1 && r == r2;
+        let moveRight = c2 == c + 1 && r == r2;
+        let moveUp = r2 == r - 1 && c == c2;
+        let moveDown = r2 == r + 1 && c == c2;
+
+        let isAdjacent = moveLeft || moveRight || moveUp || moveDown;
+
+        if (isAdjacent) {
+            let currImg = this.currTile.src;
+            let otherImg = this.otherTile.src;
+            this.currTile.src = otherImg;
+            this.otherTile.src = currImg;
+
+            let validMove = this.checkValid();
+            if (!validMove) {
+                this.currTile.src = otherImg;
+                this.otherTile.src = currImg;
+            }
+        }
+    }
+
+    crushCandy() {
+        this.crushThree();
+        document.getElementById("score").innerText = this.score;
+    }
+
+    crushThree() {
+        // Check rows
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.columns - 2; c++) {
+                let candy1 = this.board[r][c];
+                let candy2 = this.board[r][c + 1];
+                let candy3 = this.board[r][c + 2];
+                if (candy1.src == candy2.src && candy2.src == candy3.src && !candy1.src.includes("blank")) {
+                    candy1.src = "./images/blank.png";
+                    candy2.src = "./images/blank.png";
+                    candy3.src = "./images/blank.png";
+                    this.score += 5;
+                }
+            }
+        }
+
+        // Check columns
+        for (let c = 0; c < this.columns; c++) {
+            for (let r = 0; r < this.rows - 2; r++) {
+                let candy1 = this.board[r][c];
+                let candy2 = this.board[r + 1][c];
+                let candy3 = this.board[r + 2][c];
+                if (candy1.src == candy2.src && candy2.src == candy3.src && !candy1.src.includes("blank")) {
+                    candy1.src = "./images/blank.png";
+                    candy2.src = "./images/blank.png";
+                    candy3.src = "./images/blank.png";
+                    this.score += 5;
+                }
+            }
+        }
+    }
+
+    checkValid() {
+        // Check rows
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.columns - 2; c++) {
+                let candy1 = this.board[r][c];
+                let candy2 = this.board[r][c + 1];
+                let candy3 = this.board[r][c + 2];
+                if (candy1.src == candy2.src && candy2.src == candy3.src && !candy1.src.includes("blank")) {
+                    return true;
+                }
+            }
+        }
+
+        // Check columns
+        for (let c = 0; c < this.columns; c++) {
+            for (let r = 0; r < this.rows - 2; r++) {
+                let candy1 = this.board[r][c];
+                let candy2 = this.board[r + 1][c];
+                let candy3 = this.board[r + 2][c];
+                if (candy1.src == candy2.src && candy2.src == candy3.src && !candy1.src.includes("blank")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    slideCandy() {
+        for (let c = 0; c < this.columns; c++) {
+            let ind = this.rows - 1;
+            for (let r = this.rows - 1; r >= 0; r--) {
+                if (!this.board[r][c].src.includes("blank")) {
+                    this.board[ind][c].src = this.board[r][c].src;
+                    ind -= 1;
+                }
+            }
+
+            for (let r = ind; r >= 0; r--) {
+                this.board[r][c].src = "./images/blank.png";
+            }
+        }
+    }
+
+    generateCandy() {
+        for (let c = 0; c < this.columns; c++) {
+            if (this.board[0][c].src.includes("blank")) {
+                this.board[0][c].src = "./images/" + this.randomCandy() + ".png";
+            }
+        }
+    }
+
+    startTimer() {
+        this.timerInterval = setInterval(() => {
+            if (this.timerLeft > 0) {
+                this.timerLeft--;
+                this.timerDisplay.innerText = `Timer: ${this.timerLeft}s`;
+            } else {
+                clearInterval(this.timerInterval);
+                this.endGame();
+            }
+        }, 1000);
+    }
+
+    endGame() {
+        alert("Time is up!");
+        document.getElementById("gameScreen").style.display = "none";
+        document.getElementById("start-screen").style.display = "block";
+    }
+}
+
+// Initialize the game when the window loads
+window.onload = function () {
+    let game = new Game();
+    document.getElementById("playButton").addEventListener("click", function () {
+        document.getElementById("start-screen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
+        document.getElementById("board").style.display = "block";
+        game.startGame();
+        game.startTimer();
+    });
+
+    // Game loop to update game state
+    setInterval(function () {
+        game.crushCandy();
+        game.slideCandy();
+        game.generateCandy();
+    }, 100);
+};
