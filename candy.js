@@ -363,8 +363,8 @@ class Game {
         console.log(this.board);
     }
 
-    dragStart() {
-        this.currTile = this;
+    dragStart(e) {
+        this.currTile = e.target;
     }
 
     dragOver(e) {
@@ -377,8 +377,8 @@ class Game {
 
     dragLeave() {}
 
-    dragDrop() {
-        this.otherTile = this;
+    dragDrop(e) {
+        this.otherTile = e.target;
     }
 
     dragEnd() {
