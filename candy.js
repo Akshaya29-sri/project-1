@@ -348,7 +348,9 @@ class Timer{
     }
 }
 function endGame(){
-    alert("Time is up")
+    alert("Time is up");
+    document.getElementById("gameScreen").style.display="none";
+    document.getElementById("start-screen").style.display="block";
 }
 const gameTimer=new Timer(60,"timerDisplay",endGame);
 document.getElementById("playButton").addEventListener("click",function(){
