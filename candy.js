@@ -36,6 +36,8 @@ let timerInterval;
 let currTile;
 let otherTile;
 
+
+
 function randomCandy() {
     return candies[Math.floor(Math.random() * candies.length)]; //0 - 5.99
 }
@@ -188,17 +190,18 @@ function dragEnd() {
         this.otherTile=null;
 }
 }*/
-
+//const scoreManager=new scoreManager();
  function crushCandy() {
-    //crushFive();
-    //crushFour();
+    
     crushThree();
+    
     document.getElementById("score").innerText = score;
 
 }
 
 function crushThree() {
     //check rows
+  
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns-2; c++) {
             let candy1 = board[r][c];
@@ -208,9 +211,10 @@ function crushThree() {
                 candy1.src = "./images/blank.png";
                 candy2.src = "./images/blank.png";
                 candy3.src = "./images/blank.png";
-                score += 30;
+                score += 5;
             }
         }
+   
     }
 
     //check columns
@@ -223,10 +227,11 @@ function crushThree() {
                 candy1.src = "./images/blank.png";
                 candy2.src = "./images/blank.png";
                 candy3.src = "./images/blank.png";
-                score += 30;
+                score+=5;
             }
         }
     }
+   
 }
 
 function checkValid() {
@@ -282,7 +287,7 @@ function generateCandy() {
     }
 }
 
-function startTimer(){
+/*function startTimer(){
     timerInterval=setInterval(()=>{
         if(timerLeft>0){
             timerLeft--;
@@ -296,4 +301,57 @@ function startTimer(){
 function endGame(){
     alert("time is up! Game over! ")
 }
-document.getElementById("playButton").addEventListener("click",startTimer);
+document.getElementById("playButton").addEventListener("click",startTimer);*/
+
+
+class Timer{
+    constructor(duration,displayElementId,onEndCallBack){
+        this.duration=duration;
+        this.timerLeft=duration;
+        this.displayElement=document.getElementById('timer');
+        this.onEndCallBack=onEndCallBack;
+        this.timerInterval=null;
+    }
+    start(){
+        if(this.timerInterval) {
+            clearInterval(this.timerInterval);
+        }
+        this.timerLeft=this.duration;
+        this.updateDisplay();
+        this.timerInterval=setInterval(()=>{
+            if(this.timerLeft>0){
+                this.timerLeft--;
+                this.updateDisplay();
+            }else{
+                this.stop()
+                if(this.onEndCallBack){
+                    this.onEndCallBack();
+                }
+            }
+        },1000)
+    }
+    stop(){
+        clearInterval(this.timerInterval);
+        this.timerInterval=null;
+    }
+    reset(){
+        this.stop();
+        this.timerLeft=this.duration;
+        this.updateDisplay();
+    }
+    updateDisplay(){
+        if(this.displayElement){
+            this.displayElement.innerText=`Timer:${this.timerLeft}s`
+        }else{
+            console.error("Timer display element not found")
+        }
+    }
+}
+function endGame(){
+    alert("Time is up")
+}
+const gameTimer=new Timer(60,"timerDisplay",endGame);
+document.getElementById("playButton").addEventListener("click",function(){
+    //gameTimer.reset();
+    gameTimer.start();
+});
