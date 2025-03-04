@@ -320,7 +320,7 @@ document.getElementById("playButton").addEventListener("click",function(){
 
 
 class Game {
-    constructor() {
+    constructor(handleResult) {
         this.candies = ["Blue", "Orange", "Green", "Yellow", "Red", "Purple"];
         this.board = [];
         this.rows = 9;
@@ -333,6 +333,9 @@ class Game {
 
         this.currTile = null;
         this.otherTile = null;
+
+        this.handleResult=handleResult;
+        this.loop = null; 
     }
 
     randomCandy() {
@@ -360,7 +363,12 @@ class Game {
             }
             this.board.push(row);
         }
-        console.log(this.board);
+        //console.log(this.board);
+        this.loop = setInterval(() => {
+            this.crushCandy();
+            this.slideCandy();
+            this.generateCandy();
+        }, 100);
     }
 
     dragStart(e) {
@@ -421,7 +429,11 @@ class Game {
     crushCandy() {
         this.crushThree();
         document.getElementById("score").innerText = this.score;
+        if(this.score >= 300){
+            clearInterval(this.loop);
+            this.handleResult();
     }
+}
 
     crushThree() {
         // Check rows
@@ -509,7 +521,27 @@ class Game {
             }
         }
     }
+    destroy() {
+        // Stop the game loop
+        clearInterval(this.loop);
+
+        // Clear the board
+        document.getElementById("board").innerHTML = "";
+
+        // Remove event listeners from tiles
+        this.board.forEach(row => {
+            row.forEach(tile => {
+                tile.remove();
+            });
+        });
+
+        // Clear references
+        this.board = [];
+        this.currTile = null;
+        this.otherTile = null;
+    }
 }
+
 
 class Timer {
     constructor(duration, displayElementId, onEndCallBack) {
@@ -533,7 +565,7 @@ class Timer {
             } else {
                 this.stop();
                 if (this.onEndCallBack) {
-                    this.onEndCallBack();
+                    this.onEndCallBack(this.timerLeft);
                 }
             }
         }, 1000);
@@ -559,7 +591,7 @@ class Timer {
     }
 }
 
-window.onload = function() {
+/*window.onload = function() {
     const game = new Game();
 
     document.getElementById("playButton").addEventListener("click", function() {
@@ -585,6 +617,79 @@ window.onload = function() {
     document.getElementById("playButton").addEventListener("click", function() {
         gameTimer.start();
     });
+};*/
+
+let game = null; 
+let gameTimer = null; 
+
+function handleResult(timer) {
+    let resDom = document.getElementById("result");
+    let overlay = document.querySelector(".overlay");
+    let target = 300; // Assuming the target is 300
+    let score = parseInt(document.getElementById("score").innerText) || 0;
+
+    if (score >= target) {
+        gameTimer.stop();
+        resDom.innerText = "Congrats! You won";
+    } else if (timer <= 0) {
+        resDom.innerText = "Sorry, Try again!";
+    }
+    document.getElementById("reset").addEventListener("click", function() {
+        document.getElementById("gameScreen").style.display = "none";
+        document.getElementById("start-screen").style.display = "block";
+        overlay.style.display="none";
+        handleReset();
+    });
+
+    overlay.style.display = "flex"; 
+}
+
+function handleReset(){
+
+    if (game) {
+        game.destroy();
+    }
+    if(gameTimer){
+        gameTimer.stop();
+    }
+
+    document.getElementById("board").innerHTML = "";
+    document.getElementById("score").innerText = "0";
+
+    game = new Game(handleResult);
+    gameTimer = new Timer(60, "timer", function(timer) {
+        handleResult(timer);
+    });
+
+    const playButton = document.getElementById("playButton");
+    const resetButton = document.getElementById("reset");
+
+    playButton.removeEventListener("click", startGame);
+    resetButton.removeEventListener("click", resetGame);
+
+    function startGame() {
+        document.getElementById("start-screen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
+        document.getElementById("board").style.display = "block";
+        document.querySelector(".overlay").style.display = "none";
+
+        game.startGame();
+        gameTimer.start();
+    }
+
+    function resetGame() {
+        document.getElementById("gameScreen").style.display = "none";
+        document.getElementById("start-screen").style.display = "block";
+        document.querySelector(".overlay").style.display = "none";
+        handleReset(); // Restart the game
+    }
+
+    playButton.addEventListener("click", startGame);
+    resetButton.addEventListener("click", resetGame);    
+}
+
+window.onload = function() {
+    handleReset();
 };
 
 

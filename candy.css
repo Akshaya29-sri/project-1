@@ -2,10 +2,13 @@
     background: url("./background.jpg") no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, Helvetica, sans-serif;
-    color: darkcyan;
+    color: #025f5f;
     text-align: center;
+    position:fixed;
     width:100vw;
-    height:110vh;
+    height:100vh;
+    top:0;
+    left:0;
 display:none;
 }
 #start-screen{
@@ -45,7 +48,7 @@ width:100vw;
     background-color: lightblue;
     border: 5px solid slategray;
     border-radius: 10px;
-    margin: 0 auto;
+    margin: 20px auto;
     display: flex;
     flex-wrap: wrap;
     overflow:hidden;
@@ -62,7 +65,7 @@ width:100vw;
     right:20px;*/
     font-size:20px;
     font-weight:bold;
-    color:darkcyan;
+    color:#025f5f;
 }
 .header-wrapper {
     display: flex;
@@ -107,7 +110,7 @@ width:100vw;
     top: 50%;
     left: 50%;
     font-size: 50px;
-    color: white;
+    color: whitesmoke;
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
 }
