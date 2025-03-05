@@ -619,14 +619,14 @@ class Timer {
     });
 };*/
 
-let game = null; 
-let gameTimer = null; 
+let game = null; //stores instance of game class
+let gameTimer = null; //stores timer for the game
 
 function handleResult(timer) {
-    let resDom = document.getElementById("result");
-    let overlay = document.querySelector(".overlay");
+    let resDom = document.getElementById("result");//fetches html , where win or loss message is displayed
+    let overlay = document.querySelector(".overlay");//pop-up message
     let target = 300; // Assuming the target is 300
-    let score = parseInt(document.getElementById("score").innerText) || 0;
+    let score = parseInt(document.getElementById("score").innerText) || 0;//retrieves and cnvert the score from webpage
 
     if (score >= target) {
         gameTimer.stop();
@@ -635,30 +635,30 @@ function handleResult(timer) {
         resDom.innerText = "Sorry, Try again!";
     }
     document.getElementById("reset").addEventListener("click", function() {
-        document.getElementById("gameScreen").style.display = "none";
-        document.getElementById("start-screen").style.display = "block";
-        overlay.style.display="none";
-        handleReset();
+        document.getElementById("gameScreen").style.display = "none";//gamescreen is hidden
+        document.getElementById("start-screen").style.display = "block";//start-screen is shown
+        overlay.style.display="none";//pop-upmeassage is hidden
+        handleReset();//reset the game
     });
 
-    overlay.style.display = "flex"; 
+    overlay.style.display = "flex"; //displayed using flex box styling
 }
 
 function handleReset(){
 
     if (game) {
-        game.destroy();
+        game.destroy();//if game instance exist it is destroyed
     }
     if(gameTimer){
-        gameTimer.stop();
+        gameTimer.stop();//if gametimer instance exist it is stopped
     }
 
-    document.getElementById("board").innerHTML = "";
-    document.getElementById("score").innerText = "0";
+    document.getElementById("board").innerHTML = "";//clears the game board
+    document.getElementById("score").innerText = "0";//reset the score to 0
 
-    game = new Game(handleResult);
+    game = new Game(handleResult);//creates new instance of game
     gameTimer = new Timer(60, "timer", function(timer) {
-        handleResult(timer);
+        handleResult(timer);//creates new timer for 60sec which will call handleresult when timer runs out
     });
 
     const playButton = document.getElementById("playButton");
