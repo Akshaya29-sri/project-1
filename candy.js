@@ -366,6 +366,10 @@ function handleReset(){
     playButton.addEventListener("click", startGame);
     resetButton.addEventListener("click", resetGame);    
 }
+function reduceVolume(){
+    let myAudio=document.getElementById("bgmusic");
+    myAudio.volume=0.1;
+}
 
 window.onload = function() {
     handleReset();

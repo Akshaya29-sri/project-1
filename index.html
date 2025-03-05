@@ -14,7 +14,10 @@
         </div>
 
         <section id="gameScreen">
-            <embed name="superColor" src="./01. Super Color Bomb Adventure.mp3" loop="false" hidden="true"autostart="true">
+           
+                <audio id="bgmusic" autoplay="loop" onloadeddata=reduceVolume()>
+                    <source src="./01. Super Color Bomb Adventure.mp3"type="audio/mp3">
+                    </audio>
             <div class="overlay">
                 <div class="overlay-text" id="result"></div>
                 <button class="reset-btn" id="reset">Reset</button>
