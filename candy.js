@@ -351,6 +351,9 @@ function handleReset(){
         document.getElementById("gameScreen").style.display = "block";
         document.getElementById("board").style.display = "block";
         document.querySelector(".overlay").style.display = "none";
+        const audio=document.getElementById("bgmusic");
+        audio.volume=0.1;
+        audio.play();
 
         game.startGame();
         gameTimer.start();
@@ -360,16 +363,20 @@ function handleReset(){
         document.getElementById("gameScreen").style.display = "none";
         document.getElementById("start-screen").style.display = "block";
         document.querySelector(".overlay").style.display = "none";
+        const audio=document.getElementById("bgmusic");
+        audio.pause=0.1;
+        audio.currentTime=0;
         handleReset(); // Restart the game
     }
 
     playButton.addEventListener("click", startGame);
     resetButton.addEventListener("click", resetGame);    
 }
-function reduceVolume(){
+/*function reduceVolume(){
+    console.log('loaded')
     let myAudio=document.getElementById("bgmusic");
     myAudio.volume=0.1;
-}
+}*/
 
 window.onload = function() {
     handleReset();
